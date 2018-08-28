@@ -1,0 +1,20 @@
+{
+  "name": "oliveris/text",
+  "description": "Sends text messages to a provider specified.",
+  "keywords": ["Text", "messaging", "mms", "sms", "inbound", "texting", "Twilio", "Laravel"],
+  "type": "package",
+  "license": "MIT",
+  "authors": [{
+    "name": "Sam Oliveri",
+    "email": "samoliveri92@gmail.com"
+  }],
+  "autoload": {
+    "psr-4": {
+      "Text\\" : "Text/"
+    }
+  },
+  "minimum-stability": "dev",
+  "require": {
+    "twilio/sdk": "dev-master"
+  }
+}
