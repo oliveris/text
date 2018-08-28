@@ -1,7 +1,7 @@
 # Text
 Sends text messages to a provider specified.
 
-The default driver is set to Twilio which will expand eventually to pull in other services.
+The default driver is set to Twilio which will expand eventually to pull in other service providers.
 
 ### Usage
 <p>Pull in the composer package by running the command below:</p>
@@ -19,7 +19,7 @@ use Text\Text;
 ## Examples
 
 ### Environment variables
-<p>If the env method is available from your application you can set the env variables below...</p>
+<p>If the env method is available from your application you can set the env variables, see example below:</p>
 
 ```
 // TWILIO SPECIFIC SETTINGS
@@ -29,7 +29,7 @@ TWILIO_TOKEN={token_from_twilio}
 TWILIO_INBOUND_NUMBER={number_that_captures_inbound_sms}
 ```
 
-<p>If the env method is not available then the variables can be set, see example below:</p>
+<p>If the env method is not available, see example below to set them using an alternate method:</p>
 
 ```
 $text = Text::getDriver("twilio");
@@ -52,6 +52,7 @@ $text->send();
 
 ### Sending a MMS
 <p>The following example shows how you can can send a simple MMS</p>
+<p>Noticed how this may display differently dependent on device. (iphone/android)</p>
 
 ```
 $text = Text::getDriver("twilio");
@@ -63,7 +64,7 @@ $text->send();
 ```
 
 ### Getting the inbound SMS
-<p>To get all of the inbound texts sent to the twilio number</p>
+<p>To get all of the inbound texts sent to the number</p>
 
 ```
 $text = Text::getDriver("twilio");
