@@ -10,6 +10,8 @@ abstract class Text
 
     protected $token;
 
+    protected $inbound_number;
+
     protected $settings;
 
     protected $to;
@@ -87,6 +89,27 @@ abstract class Text
     }
 
     /**
+     * - <b>setInboundNumber()</b>
+     * -----------------------------------------------------------
+     *
+     * This method sets an inbound number
+     *
+     * @param string $value
+     *
+     * @return string
+     * @throw Exception\Notify
+     */
+    public function setInboundNumber(string $value = ""): string
+    {
+        if (preg_match("/^\+?\d{1,15}$/Ui", $value)) {
+            $this->inbound_number = $value;
+            return $this->inbound_number;
+        } else {
+            throw new Exception\Notify("The to number {$value} is not a valid mobile number");
+        }
+    }
+
+    /**
      * - <b>getDriverSettings()</b>
      * -----------------------------------------------------------
      *
@@ -95,7 +118,9 @@ abstract class Text
      * these settings can be manually set
      *
      * @param string $driver
+     *
      * @return array $settings
+     * @throw Exception\Notify
      */
     public function getDriverSettings(string $driver): array
     {
@@ -103,8 +128,9 @@ abstract class Text
 
         switch ($driver) {
             case 'twilio':
-                $this->settings['sid']   = $this->sid;
-                $this->settings['token'] = $this->token;
+                $this->settings['sid']            = $this->sid;
+                $this->settings['token']          = $this->token;
+                $this->settings['inbound_number'] = $this->inbound_number;
                 break;
             default:
                 throw new Exception\Notify("Cannot get the settings for {$driver} driver");
