@@ -25,6 +25,8 @@ use Text\Text;
 // TWILIO SPECIFIC SETTINGS
 TWILIO_SID={sid_from_twilio}
 TWILIO_TOKEN={token_from_twilio}
+// may want to set the inbound number
+TWILIO_INBOUND_NUMBER={number_that_captures_inbound_sms}
 ```
 
 <p>If the env method is not available then the variables can be set, see example below:</p>
@@ -33,6 +35,8 @@ TWILIO_TOKEN={token_from_twilio}
 $text = Text::getDriver("twilio");
 $text->setSid(***********);
 $text->setToken(************);
+// may want to set the inbound number
+$text->setInboundNumber(************);
 ```
 
 ### Sending a SMS
