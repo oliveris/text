@@ -3,6 +3,7 @@
 namespace Text\Driver;
 
 use Text\Text;
+use Text\Exception;
 use Twilio\Rest\Client;
 
 class Twilio extends Text
@@ -17,10 +18,12 @@ class Twilio extends Text
      */
     public function send(): bool
     {
-        $sid = env('TWILIO_SID');
+        if (!function_exists('env')) {
+            $settings = $this->getDriverSettings('twilio');
+        }
 
-        $token = env('TWILIO_TOKEN');
-
+        $sid    = function_exists('env') ? env('TWILIO_SID') : $settings['sid'];
+        $token  = function_exists('env') ? env('TWILIO_TOKEN') : $settings['token'];
         $client = new Client($sid, $token);
 
         $text = $this->compose();
@@ -41,7 +44,7 @@ class Twilio extends Text
             );
             return true;
         } catch (Exception $e) {
-            throw new \Exception("Twilio Error:" . $e->getMessage());
+            throw new Exception\Notify("Twilio Error:" . $e->getMessage());
         }
     }
 
@@ -56,19 +59,21 @@ class Twilio extends Text
      */
     public function getInboundTexts(): array
     {
-        $sid = env('TWILIO_SID');
+        if (!function_exists('env')) {
+            $settings = $this->getDriverSettings('twilio');
+        }
 
-        $token = env('TWILIO_TOKEN');
-
+        $sid    = function_exists('env') ? env('TWILIO_SID') : $settings['sid'];
+        $token  = function_exists('env') ? env('TWILIO_TOKEN') : $settings['token'];
         $client = new Client($sid, $token);
 
         try {
-            $messages = $client->messages->read(array(
-                'To' => env('TWILIO_NUMBER'),
-            ));
+            $messages = $client->messages->read([
+                'To' => function_exists('env') ? env('TWILIO_INBOUND_NUMBER') : $settings['inbound_number'],
+            ]);
             return $messages;
         } catch (Exception $e) {
-            throw new \Exception("Twilio Error:" . $e->getMessage());
+            throw new Exception\Notify("Twilio Error:" . $e->getMessage());
         }
     }
 }

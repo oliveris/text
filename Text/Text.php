@@ -6,35 +6,21 @@ use Text\Driver\Twilio;
 
 abstract class Text
 {
-    /**
-     * The number to send a sms to
-     * @var string
-     */
+    protected $sid;
+
+    protected $token;
+
+    protected $settings;
+
     protected $to;
 
-    /**
-     * The message of the text
-     * @var string
-     */
     protected $body;
 
-    /**
-     * The from number
-     * @var string
-     */
     protected $from;
 
-    /**
-     * The media URL
-     * @var string
-     */
     protected $media;
 
-    /**
-     * Default driver
-     */
     const DEFAULT_DRIVER = 'twilio';
-
 
     /**
      * - <b>getDriver()</b>
@@ -49,7 +35,6 @@ abstract class Text
      */
     public static function getDriver(string $driver = self::DEFAULT_DRIVER): Text
     {
-        //force the $source to lowercase
         $driver = strtolower((string)$driver);
         switch ($driver) {
             case 'twilio':
@@ -57,6 +42,75 @@ abstract class Text
             default:
                 throw new Exception\Notify("The mail driver {$driver} is not authorised");
         }
+    }
+
+    /**
+     * - <b>setID()</b>
+     * -----------------------------------------------------------
+     *
+     * This method sets the $sid and returns the $sid
+     *
+     * @param string $value
+     *
+     * @return string
+     * @throws Exception\Notify
+     */
+    public function setSid(string $value): string
+    {
+        if (!empty($value)) {
+            $this->sid = $value;
+            return $this->sid;
+        } else {
+            throw new Exception\Notify("The sid has not been set");
+        }
+    }
+
+    /**
+     * - <b>setToken()</b>
+     * -----------------------------------------------------------
+     *
+     * This method sets the token and returns the $token
+     *
+     * @param string $value
+     *
+     * @return string
+     * @throws Exception\Notify
+     */
+    public function setToken(string $value): string
+    {
+        if (!empty($value)) {
+            $this->token = $value;
+            return $this->token;
+        } else {
+            throw new Exception\Notify("The token has not been set");
+        }
+    }
+
+    /**
+     * - <b>getDriverSettings()</b>
+     * -----------------------------------------------------------
+     *
+     * This method is used to obtain the driver settings
+     * Use case is if the method env is not available then
+     * these settings can be manually set
+     *
+     * @param string $driver
+     * @return array $settings
+     */
+    public function getDriverSettings(string $driver): array
+    {
+        $this->driver_settings = [];
+
+        switch ($driver) {
+            case 'twilio':
+                $this->settings['sid']   = $this->sid;
+                $this->settings['token'] = $this->token;
+                break;
+            default:
+                throw new Exception\Notify("Cannot get the settings for {$driver} driver");
+        }
+
+        return $this->settings;
     }
 
     /**
@@ -156,10 +210,10 @@ abstract class Text
     {
         if (isset($this->to, $this->body, $this->from)) {
             return [
-                'from' => $this->from,
-                'to' => $this->to,
-                'body' => $this->body,
-                'media' => $this->media
+                'from'   => $this->from,
+                'to'     => $this->to,
+                'body'   => $this->body,
+                'media'  => $this->media
             ];
         } else {
             throw new Exception\Notify("To send a Text to, body and from must be set");
